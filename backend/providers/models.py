@@ -6,7 +6,7 @@ from django.db import models
 # Example include Catering etc.
 # Each category must have a unique name.
 """
-class CategoryModel(models.Models):
+class CategoryModel(models.Model):
     name = models.CharField(primary_key=True, unique=True, max_length=155, blank=False)
     class Meta:
         ordering = ["name"]
@@ -20,7 +20,7 @@ class CategoryModel(models.Models):
 """
 service provider Model
 """ 
-class ProviderModel(models.Models):
+class ProviderModel(models.Model):
     name = models.CharField(max_length=255)
 
     """ implementation choice to avoid accidentary deleting providers when removing catergory""" 
