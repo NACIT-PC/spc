@@ -31,8 +31,8 @@ class ProviderSerializer(serializers.ModelSerializer):
             "category",
             "category_id",
             "city",
+            "price_range",
             "description",
-            "price_range"
             "phone",
             "whatsapp",
             "is_verified",

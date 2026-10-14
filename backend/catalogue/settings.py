@@ -13,11 +13,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / ".env")
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+SECRET_KEY = os.getenv("DJANGO_API_KEY")
 
 if not SECRET_KEY:
     raise RuntimeError(
-        "Django secret key is missing."
+        "Django API key is missing."
     )
 
 # SECURITY WARNING: don't run with debug turned on in production!
