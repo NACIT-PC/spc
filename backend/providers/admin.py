@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import CatergoryModel, ProviderModel
+from .models import CategoryModel, ProviderModel
 
-@admin.register(CatergoryModel)
-class CatergoryAdmin(admin.ModelAdmin):
-    list_display=("id", "name")
+@admin.register(CategoryModel)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display=("id", "name",)
     search_fields=("name",)
     ordering=("name",)
 
@@ -15,11 +15,11 @@ class ProviderAdmin(admin.ModelAdmin):
         "category",
         "city",
         "is_verified",
-        "created_at"
+        "created_at",
     )
 
-    list_filter=("category", "city", "is_verified")
-    search_fields=("name", "city", "description")
-    readonly_fields=("created_at")
-    ordering=("name")
-    list_select_related=("category")
+    list_filter=("category","city", "is_verified",)
+    search_fields=("name", "city", "description",)
+    readonly_fields=("created_at",)
+    ordering=("name",)
+    list_select_related=("category",)

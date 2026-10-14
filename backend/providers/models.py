@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 
 """
@@ -7,10 +8,12 @@ from django.db import models
 # Each category must have a unique name.
 """
 class CategoryModel(models.Model):
-    name = models.CharField(primary_key=True, unique=True, max_length=155, blank=False)
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+    name = models.CharField(unique=True, max_length=155, blank=False)
     class Meta:
+        #sort categories alphabetically
         ordering = ["name"]
-        plural_name = "categories"
+        verbose_name_plural = "categories"
 
     def __str__(self):
         return f"{self.name}"
@@ -21,20 +24,21 @@ class CategoryModel(models.Model):
 service provider Model
 """ 
 class ProviderModel(models.Model):
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     name = models.CharField(max_length=255)
 
     """ implementation choice to avoid accidentary deleting providers when removing catergory""" 
-    catergory = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, related_name="providers")
+    category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, related_name="providers")
 
     city = models.CharField(max_length=155)
     description = models.TextField(blank=False)
-    phone = models.IntegerField(unique=True, blank=False, max_length=14)
+    phone = models.IntegerField(unique=True, blank=False)
     whatsapp = models.CharField(max_length=100, blank=True)
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        #sort categories alphabetically
+        #sort  providers alphabetically
         ordering = ["name"] 
 
 
