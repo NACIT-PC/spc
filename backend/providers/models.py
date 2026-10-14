@@ -31,6 +31,7 @@ class ProviderModel(models.Model):
     category = models.ForeignKey(CategoryModel, on_delete=models.PROTECT, related_name="providers")
 
     city = models.CharField(max_length=155)
+    price_range = models.CharField(max_length=200)
     description = models.TextField(blank=False)
     phone = models.IntegerField(unique=True, blank=False)
     whatsapp = models.CharField(max_length=100, blank=True)
