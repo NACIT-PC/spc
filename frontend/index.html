@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Service Provider Catalogue</title>
+  <meta name="description" content="Find decorators, caterers, MCs and other event service providers in Malawi.">
+  <link rel="icon" type="image/svg+xml" href="assets/service_provider_logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#results">Skip to results</a>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="topbar">
+        <a class="brand" href="./">
+          <img class="brand__logo" src="assets/service_provider_logo.svg" alt="" width="44" height="44">
+          <span>Service Provider Catalogue</span>
+        </a>
+      </div>
+      <div class="hero">
+        <p class="hero__lead">Browse decorators, caterers, MCs, photographers and more. Compare your options, then contact providers directly on WhatsApp or by phone.</p>
+      </div>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="finder" role="search">
+      <div class="finder__field finder__field--search">
+        <label class="sr-only" for="search">Search providers</label>
+        <img class="finder__icon" src="assets/user-search.svg" alt="" width="20" height="20">
+        <input id="search" type="search" placeholder="Search by name or description" autocomplete="off">
+      </div>
+      <div class="finder__field">
+        <label class="sr-only" for="category">Category</label>
+        <img class="finder__icon" src="assets/briefcase-business.svg" alt="" width="20" height="20">
+        <select id="category">
+          <option value="">All categories</option>
+        </select>
+      </div>
+      <div class="finder__field">
+        <label class="sr-only" for="city">City</label>
+        <img class="finder__icon" src="assets/map-pin-search.svg" alt="" width="20" height="20">
+        <select id="city">
+          <option value="">All cities</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="chips" class="chips" role="group" aria-label="Filter by category"></div>
+
+    <div class="status-row">
+      <p id="status" role="status"></p>
+      <button id="clear" class="link-btn" type="button" hidden>Clear filters</button>
+    </div>
+
+    <div id="state" class="state" hidden>
+      <span class="state__icon">
+        <img id="state-icon" src="assets/cloud-off.svg" alt="" width="56" height="56">
+      </span>
+      <h2 id="state-title" class="state__title"></h2>
+      <p id="state-text" class="state__text"></p>
+      <button id="retry" class="btn btn--brand" type="button" hidden>Try again</button>
+    </div>
+
+    <section id="results" class="results" aria-label="Providers"></section>
+  </main>
+  <footer class="site-footer">
+    <p>Service Provider Catalogue &bull; NACIT Programming Club, Group 2</p>
+    <p class="site-footer__note">Demonstration project. Listings are sample data, not real or verified businesses.</p>
+  </footer>
+  <template id="card-template">
+    <article class="card">
+      <div class="card__head">
+        <img class="card__icon" src="assets/contact-round.svg" alt="" width="40" height="40">
+        <div class="card__title">
+          <h2 class="card__name"></h2>
+          <p class="card__meta">
+            <span class="card__category"></span>
+            <span class="card__location">
+              <img class="inline-icon" src="assets/map-pin-search.svg" alt="" width="14" height="14">
+              <span class="card__city"></span>
+            </span>
+          </p>
+        </div>
+        <span class="card__verified" hidden>Verified</span>
+      </div>
+
+      <p class="card__description"></p>
+
+      <div class="card__foot">
+        <span class="card__price"></span>
+        <button class="link-btn card__more" type="button">Details</button>
+      </div>
+
+      <div class="card__actions">
+        <a class="btn btn--whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="btn btn--phone">
+          <img src="assets/contact.svg" alt="" width="18" height="18">
+          Call
+        </a>
+      </div>
+    </article>
+  </template>
+  <dialog id="details" aria-labelledby="details-name">
+    <div class="details">
+      <div class="card__head">
+        <img class="card__icon" src="assets/contact-round.svg" alt="" width="40" height="40">
+        <div class="card__title">
+          <h2 id="details-name" class="card__name details__name"></h2>
+          <p class="card__meta">
+            <span class="details__category"></span>
+            <span class="card__location">
+              <img class="inline-icon" src="assets/map-pin-search.svg" alt="" width="14" height="14">
+              <span class="details__city"></span>
+            </span>
+          </p>
+        </div>
+        <span class="card__verified details__verified" hidden>Verified</span>
+      </div>
+      <p class="details__description"></p>
+      <dl class="details__facts">
+        <div><dt>Price</dt><dd class="details__price"></dd></div>
+        <div><dt>Phone</dt><dd class="details__phone"></dd></div>
+        <div><dt>Verification</dt><dd class="details__verification"></dd></div>
+        <div><dt>Listed</dt><dd class="details__listed"></dd></div>
+      </dl>
+      <div class="details__actions">
+        <form method="dialog">
+          <button class="btn btn--quiet">Close</button>
+        </form>
+        <a class="btn btn--whatsapp" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="btn btn--phone">
+          <img src="assets/contact.svg" alt="" width="18" height="18">
+          Call
+        </a>
+      </div>
+    </div>
+  </dialog>
+</body>
+</html>
