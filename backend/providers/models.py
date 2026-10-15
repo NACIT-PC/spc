@@ -41,6 +41,7 @@ class ProviderModel(models.Model):
     class Meta:
         #sort  providers alphabetically
         ordering = ["name"] 
+        verbose_name_plural="providers"
 
 
     def __string__(self):
