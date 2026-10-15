@@ -486,13 +486,69 @@ dialog::backdrop {
   margin-top: 1.5rem;
 }
 
+/* Professional Dark Footer Styling */
 .site-footer {
-  text-align: center;
-  padding: 2rem 0;
+  background: #1a1d20;
+  color: #a0aec0;
+  padding: 3rem 0 1.5rem;
+  margin-top: 4rem;
   border-top: 1px solid var(--border-color);
-  color: var(--text-muted);
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.footer__col h3 {
+  color: var(--brand-gold);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.footer__col p,
+.footer__col a {
+  color: #cbd5e0;
+  font-size: 0.9rem;
+  text-decoration: none;
+  margin-bottom: 0.35rem;
+  display: block;
+}
+
+.footer__col a:hover {
+  color: var(--brand-gold);
+  text-decoration: underline;
+}
+
+.footer__social {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1.5rem 0 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer__social a {
+  color: var(--brand-gold);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.footer__social a:hover {
+  text-decoration: underline;
+}
+
+.footer__bottom {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 0.85rem;
-  background: var(--surface-color);
+  color: #718096;
 }
 
 @keyframes fadeIn {
