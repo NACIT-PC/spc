@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&display=swap">
   <link rel="stylesheet" href="styles.css">
+  <script src="api.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -29,6 +30,12 @@
     </div>
   </header>
   <main class="wrap">
+    <div class="authbar">
+      <p id="auth-status" role="status">Browsing as guest.</p>
+      <a id="admin-link" class="btn btn--quiet" href="admin.html" hidden>Admin</a>
+      <a id="login-link" class="btn btn--quiet" href="login.html">Sign in</a>
+      <button id="logout-btn" class="btn btn--quiet" type="button" hidden>Log out</button>
+    </div>
     <div class="finder" role="search">
       <div class="finder__field finder__field--search">
         <label class="sr-only" for="search">Search providers</label>
@@ -55,6 +62,7 @@
 
     <div class="status-row">
       <p id="status" role="status"></p>
+      <button id="add-btn" class="link-btn" type="button">List your business</button>
       <button id="clear" class="link-btn" type="button" hidden>Clear filters</button>
     </div>
 
@@ -156,6 +164,26 @@
         </a>
       </div>
     </div>
+  </dialog>
+  <dialog id="submit" aria-labelledby="submit-title">
+    <form id="submit-form" class="details">
+      <h2 id="submit-title" class="state__title">List your business</h2>
+      <p class="state__text">New listings go live as unverified until the team checks them.</p>
+      <div class="form-grid">
+        <label>Business name<input id="f-name" required maxlength="255"></label>
+        <label>Category<select id="f-category" required><option value="">Choose…</option></select></label>
+        <label>City<input id="f-city" required maxlength="155" placeholder="Blantyre"></label>
+        <label>Price range<input id="f-price" required maxlength="200" placeholder="Indicative range: mid"></label>
+        <label class="form-grid__full">Description<textarea id="f-description" required rows="3"></textarea></label>
+        <label>Phone<input id="f-phone" required maxlength="20" placeholder="265991234567"></label>
+        <label>WhatsApp (optional)<input id="f-whatsapp" maxlength="100" placeholder="265991234567"></label>
+      </div>
+      <p id="submit-status" role="status"></p>
+      <div class="details__actions">
+        <button id="submit-cancel" class="btn btn--quiet" type="button">Cancel</button>
+        <button class="btn btn--brand" type="submit">Submit listing</button>
+      </div>
+    </form>
   </dialog>
 </body>
 </html> 

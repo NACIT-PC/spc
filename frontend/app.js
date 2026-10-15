@@ -1,10 +1,5 @@
 "use strict";
-
-const API_URL = ["localhost", "127.0.0.1", ""].includes(location.hostname)
-  ? "http://127.0.0.1:8000/api"
-  : "https://YOUR-APP-NAME.onrender.com/api";
-
-const DEMO = new URLSearchParams(location.search).has("demo");
+// Shared API helpers (API_URL, DEMO, tokens, apiFetch) come from api.js.
 
 const DEMO_RESPONSE = [
   { id: "demo-1", name: "Example Decor", category: { id: "c1", name: "Decor" },
@@ -49,6 +44,17 @@ const stateTextEl    = document.querySelector("#state-text");
 const retryBtn       = document.querySelector("#retry");
 const cardTemplate   = document.querySelector("#card-template");
 const detailsEl      = document.querySelector("#details");
+const authStatusEl   = document.querySelector("#auth-status");
+const loginLink      = document.querySelector("#login-link");
+const adminLink      = document.querySelector("#admin-link");
+const logoutBtn      = document.querySelector("#logout-btn");
+const addBtn         = document.querySelector("#add-btn");
+const submitEl       = document.querySelector("#submit");
+const submitForm     = document.querySelector("#submit-form");
+const submitStatusEl = document.querySelector("#submit-status");
+const submitCategory = document.querySelector("#f-category");
+
+let categoryIdByName = {};
 
 let allProviders = [];
 let selectedCategory = "";
@@ -288,7 +294,18 @@ async function fetchProviders() {
   }
 
   const data = await response.json();
-  return Array.isArray(data) ? data : (data.results ?? []);
+  // ponytail: follow `next` so client-side filters see the full list, not page 1
+  if (Array.isArray(data)) return data;
+  const rows = [...(data.results ?? [])];
+  let next = data.next;
+  while (next) {
+    const page = await fetch(next, options);
+    if (!page.ok) throw new Error(`The server answered with status ${page.status}`);
+    const body = await page.json();
+    rows.push(...(body.results ?? []));
+    next = body.next;
+  }
+  return rows;
 }
 
 async function loadProviders() {
@@ -306,6 +323,14 @@ async function loadProviders() {
   try {
     const raw = await fetchProviders();
     allProviders = raw.map(normalizeProvider);
+
+    categoryIdByName = {};
+    raw.forEach((r) => {
+      if (r.category && r.category.name && r.category.id) {
+        categoryIdByName[r.category.name] = r.category.id;
+      }
+    });
+    fillSelect(submitCategory, Object.keys(categoryIdByName));
 
     buildChips(allProviders.map((p) => p.category));
     fillSelect(categorySelect, allProviders.map((p) => p.category));
@@ -328,6 +353,67 @@ function setFact(selector, value) {
   const el = detailsEl.querySelector(selector);
   el.textContent = value;
   el.parentElement.hidden = !value;
+}
+
+// ---- Catalogue account row (login lives on login.html)
+function syncAuthUI() {
+  const { username } = getTokens();
+  const loggedIn = Boolean(username);
+  authStatusEl.textContent = loggedIn ? `Signed in as ${username}.` : "Browsing as guest.";
+  loginLink.hidden = loggedIn;
+  logoutBtn.hidden = !loggedIn;
+  adminLink.hidden = true;
+  if (loggedIn && !DEMO) {
+    apiFetch("/auth/me/").then(async (res) => {
+      if (res.ok && (await res.json()).is_staff) adminLink.hidden = false;
+    }).catch(() => {});
+  }
+}
+
+function openSubmit() {
+  if (DEMO) {
+    submitStatusEl.textContent = "Listing is disabled in demo mode.";
+  } else if (!getTokens().username) {
+    submitStatusEl.textContent = "Sign in first, then submit your listing.";
+  } else {
+    submitStatusEl.textContent = "";
+  }
+  if (typeof submitEl.showModal === "function") submitEl.showModal();
+  else submitEl.setAttribute("open", "");
+}
+
+async function handleSubmit(event) {
+  event.preventDefault();
+  const name = submitCategory.value;
+  const body = {
+    name:          document.querySelector("#f-name").value.trim(),
+    category_id:   categoryIdByName[name],
+    city:          document.querySelector("#f-city").value.trim(),
+    price_range:   document.querySelector("#f-price").value.trim(),
+    description:   document.querySelector("#f-description").value.trim(),
+    phone:         document.querySelector("#f-phone").value.trim(),
+    whatsapp:      document.querySelector("#f-whatsapp").value.trim(),
+  };
+  submitStatusEl.textContent = "Sending...";
+  try {
+    const res = await apiFetch("/providers/", { method: "POST", body: JSON.stringify(body) });
+    if (res.status === 401) {
+      submitStatusEl.textContent = "Sign in first, then submit again.";
+      return;
+    }
+    if (!res.ok) {
+      const errors = await res.json().catch(() => ({}));
+      const first = Object.values(errors).flat()[0];
+      submitStatusEl.textContent = typeof first === "string" ? first : "Submit failed. Check the fields.";
+      return;
+    }
+    submitEl.close();
+    submitForm.reset();
+    await loadProviders();
+    setStatus("Thanks — your listing is live as unverified.");
+  } catch {
+    submitStatusEl.textContent = "Could not reach the server. Try again.";
+  }
 }
 
 function openDetails(provider) {
@@ -394,4 +480,10 @@ detailsEl.addEventListener("click", (event) => {
   if (event.target === detailsEl) detailsEl.close();
 });
 
+logoutBtn.addEventListener("click", () => { clearTokens(); syncAuthUI(); });
+addBtn.addEventListener("click", openSubmit);
+submitForm.addEventListener("submit", handleSubmit);
+document.querySelector("#submit-cancel").addEventListener("click", () => submitEl.close());
+
+syncAuthUI();
 loadProviders();
