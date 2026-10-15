@@ -1,0 +1,21 @@
+# Render blueprint: New > Blueprint > select this repo.
+# ponytail: free web service + ephemeral SQLite (reseeded at boot).
+# For persistent data, add a Neon free-tier Postgres and set DATABASE_URL.
+services:
+  - type: web
+    name: spc-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /api/health/
+    envVars:
+      - key: DJANGO_API_KEY
+        sync: false
+      - key: DJANGO_ADMIN_PASSWORD
+        sync: false
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://your-app.vercel.app
+      - key: DATABASE_URL
+        sync: false

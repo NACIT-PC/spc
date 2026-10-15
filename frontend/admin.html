@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — Service Provider Catalogue</title>
+  <meta name="description" content="Staff review queue for provider listings.">
+  <link rel="icon" type="image/svg+xml" href="assets/service_provider_logo.svg">
+  <link rel="stylesheet" href="styles.css">
+  <script src="api.js" defer></script>
+  <script src="admin.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="topbar">
+        <a class="brand" href="./">
+          <img class="brand__logo" src="assets/service_provider_logo.svg" alt="" width="44" height="44">
+          <span>Service Provider Catalogue</span>
+        </a>
+      </div>
+      <div class="hero">
+        <h1>Review queue</h1>
+        <p class="hero__lead">Verify legitimate listings so they earn the badge. Delete spam.</p>
+      </div>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="status-row">
+      <p id="admin-status" role="status">Checking access...</p>
+      <button id="add-btn" class="link-btn" type="button" hidden>Add provider</button>
+      <a class="link-btn" href="./">Back to catalogue</a>
+    </div>
+    <p id="admin-stats" class="state__text" hidden></p>
+    <section id="admin-rows" class="results" aria-label="Listings awaiting review"></section>
+  </main>
+  <dialog id="submit" aria-labelledby="submit-title">
+    <form id="submit-form" class="details">
+      <h2 id="submit-title" class="state__title">Add provider</h2>
+      <p class="state__text">Staff entries go live immediately as unverified.</p>
+      <div class="form-grid">
+        <label>Business name<input id="f-name" required maxlength="255"></label>
+        <label>Category<select id="f-category" required><option value="">Choose…</option></select></label>
+        <label>City<input id="f-city" required maxlength="155" placeholder="Blantyre"></label>
+        <label>Price range<input id="f-price" required maxlength="200" placeholder="Indicative range: mid"></label>
+        <label class="form-grid__full">Description<textarea id="f-description" required rows="3"></textarea></label>
+        <label>Phone<input id="f-phone" required maxlength="20" placeholder="265991234567"></label>
+        <label>WhatsApp (optional)<input id="f-whatsapp" maxlength="100" placeholder="265991234567"></label>
+      </div>
+      <p id="submit-status" role="status"></p>
+      <div class="details__actions">
+        <button id="submit-cancel" class="btn btn--quiet" type="button">Cancel</button>
+        <button class="btn btn--brand" type="submit">Add listing</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

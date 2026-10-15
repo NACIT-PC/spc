@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Service Provider Catalogue",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [900, 480],
+    "views": [
+      { "id": "request-path", "label": "Catalogue request path", "focus": ["organiser", "frontend", "api", "db"], "note": "How an organiser goes from browser to provider data." },
+      { "id": "staff-review", "label": "Staff review path", "focus": ["staff", "frontend", "api", "auth", "db"], "note": "How staff verify listings with JWT auth." }
+    ]
+  },
+  "components": [
+    { "id": "organiser", "type": "external", "label": "Event organisers", "sublabel": "Browser", "pos": [40, 300], "size": [130, 64] },
+    { "id": "staff", "type": "external", "label": "Staff", "sublabel": "Browser", "pos": [250, 140], "size": [130, 64] },
+    { "id": "frontend", "type": "frontend", "label": "Static frontend", "sublabel": "HTML/CSS/vanilla JS", "pos": [250, 300], "size": [140, 64] },
+    { "id": "auth", "type": "security", "label": "SimpleJWT", "sublabel": "Bearer access + refresh", "pos": [470, 140], "size": [140, 64] },
+    { "id": "api", "type": "backend", "label": "Django + DRF API", "sublabel": "gunicorn :8000", "pos": [470, 300], "size": [140, 64] },
+    { "id": "db", "type": "database", "label": "PostgreSQL", "sublabel": "SQLite fallback", "pos": [700, 300], "size": [140, 64] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Vercel static", "wraps": ["frontend"] },
+    { "kind": "region", "label": "Render", "wraps": ["api", "db"] },
+    { "kind": "security-group", "label": "Bearer JWT", "wraps": ["api", "auth"] }
+  ],
+  "connections": [
+    { "id": "browse", "from": "organiser", "to": "frontend", "label": "HTTPS", "variant": "emphasis" },
+    { "id": "review-queue", "from": "staff", "to": "frontend", "label": "review queue", "fromSide": "bottom", "toSide": "top" },
+    { "id": "api-calls", "from": "frontend", "to": "api", "label": "HTTPS JSON", "variant": "emphasis" },
+    { "id": "jwt", "from": "api", "to": "auth", "label": "sign + verify", "variant": "security", "fromSide": "top", "toSide": "bottom" },
+    { "id": "persist", "from": "api", "to": "db", "label": "SQL" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Edge", "items": ["Static frontend, no build step", "Demo mode runs with no backend"] },
+    { "dot": "emerald", "title": "Application", "items": ["Django + DRF, paginated API", "Submissions go live unverified"] },
+    { "dot": "amber", "title": "Data", "items": ["Postgres via DATABASE_URL, SQLite fallback", "Seed fixture plus admin migration at boot"] }
+  ]
+}

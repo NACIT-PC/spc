@@ -1,0 +1,55 @@
+# Local development stack. One command: docker compose up --build
+#
+#   Frontend: http://localhost:8080  (nginx, serves ./frontend read-only)
+#   API:      http://localhost:8000/api  (Django dev server with auto-reload)
+#
+# All host ports bind 127.0.0.1 only — reachable from your machine, not the LAN.
+# (Processes listen on 0.0.0.0 *inside* their containers; that is what makes
+# Docker's port mapping work. The localhost restriction happens at publish time.)
+#
+# ponytail: compose uses Postgres for dev/prod parity; plain SQLite remains
+# the zero-Docker fallback (docker build/run, or local venv).
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: spc
+      POSTGRES_PASSWORD: spc
+      POSTGRES_DB: spc
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5433:5432"  # host port 5433 avoids clashing with any local Postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U spc"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: ./backend
+    # ponytail: dev server (auto-reload over the mounted code), not gunicorn;
+    # the image default CMD stays production-shaped for Render
+    command: sh -c "python manage.py migrate && python manage.py loaddata demo_providers && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      DATABASE_URL: postgres://spc:spc@db:5432/spc
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    image: nginx:alpine
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
