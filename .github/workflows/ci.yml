@@ -12,7 +12,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - run: pip install ./backend
+      # ponytail: editable install — backend/ is dependency pins, not a package
+      - run: pip install -e ./backend
       - run: cd backend && python manage.py check && python manage.py test
 
   frontend:

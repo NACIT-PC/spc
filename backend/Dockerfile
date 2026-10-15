@@ -15,4 +15,4 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 
 # ponytail: migrate + reseed demo data at boot (sqlite is ephemeral on free tier); Postgres persists
-CMD ["sh", "-c", "python manage.py migrate && (python manage.py loaddata demo_providers || true) && exec gunicorn catalogue.wsgi:application --bind localhost:${PORT:-8000}"]
+CMD ["sh", "-c", "python manage.py migrate && (python manage.py loaddata demo_providers || true) && exec gunicorn catalogue.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]

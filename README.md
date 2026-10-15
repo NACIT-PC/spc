@@ -52,3 +52,8 @@ postman collection run <file> --no-report-events  # API E2E (see backend/README.
 
 Sample data is fictional. Status honesty applies: requirements are provisional until
 stakeholder interviews happen — see the docs bundle for the full picture.
+
+## Docs
+
+`docs/` — 01 overview · 02 architecture · 03 API reference · 04 frontend guide ·
+05 workflows · 06 operations (env vars, CI, deploy, troubleshooting).

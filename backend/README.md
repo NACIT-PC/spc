@@ -40,6 +40,9 @@ needs login. New listings go live as `is_verified=false`; only staff can verify.
 - Frontend: any static host (e.g. Vercel). Point it at the live API with
   `?api=https://<your-api>.onrender.com/api` or edit `API_URL` in `app.js`.
 
+Full guides live in `../docs/`: 01 overview · 02 architecture · 03 API reference ·
+04 frontend guide · 05 workflows · 06 operations.
+
 ## Docker operations (compose stack at repo root)
 
 ```bash
