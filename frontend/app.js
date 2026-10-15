@@ -164,15 +164,15 @@ const STATES = {
     retry: true,
   },
   empty: {
-    icon:  "assets/briefcase-business.svg",
-    title: "No providers yet",
-    text:  "Providers added by the team will show up here.",
+    icon:  "assets/user-search.svg",
+    title: "Provider not found",
+    text:  "Try a different name, category or city.",
     retry: false,
   },
   nomatch: {
     icon:  "assets/user-search.svg",
-    title: "No matches",
-    text:  "Try a different word, category or city, or clear the filters.",
+    title: "Provider not found",
+    text:  "Try a different name, category or city, or clear the filters.",
     retry: false,
   },
 };
