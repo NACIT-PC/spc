@@ -1,6 +1,5 @@
 from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import APIHealthCheck, CategoryList, MeView, ProviderDetail, ProviderList, RegisterView, VerifyProvider
+from .views import APIHealthCheck, CategoryList, MeView, ProviderDetail, ProviderList, RegisterView, TokenObtainPairView, TokenRefreshView, VerifyProvider
 
 urlpatterns=[
     path("health/", APIHealthCheck.as_view(), name="api-health"),

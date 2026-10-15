@@ -7,7 +7,7 @@ const PARAMS = new URLSearchParams(location.search);
 
 // ponytail: ?api= overrides the backend (demo-day/Render) without redeploying
 const API_URL = PARAMS.get("api") || (["localhost", "127.0.0.1", ""].includes(location.hostname)
-  ? "http://127.0.0.1:8000/api"
+  ? "http://localhost:8000/api"
   : "https://YOUR-APP-NAME.onrender.com/api");
 
 const DEMO = PARAMS.has("demo");

@@ -126,9 +126,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 
-# ponytail: demo-only broad CORS; restrict CORS_ALLOWED_ORIGINS before public use
-CORS_ALLOW_ALL_ORIGINS = DEBUG
-
 
 # API defaults
 REST_FRAMEWORK = {

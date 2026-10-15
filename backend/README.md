@@ -39,3 +39,30 @@ needs login. New listings go live as `is_verified=false`; only staff can verify.
   Free tier uses ephemeral SQLite reseeded from `demo_providers` at boot.
 - Frontend: any static host (e.g. Vercel). Point it at the live API with
   `?api=https://<your-api>.onrender.com/api` or edit `API_URL` in `app.js`.
+
+## Docker operations (compose stack at repo root)
+
+```bash
+docker compose up --build       # full app: db + api + frontend
+docker compose up --build api   # rebuild after backend changes only
+docker compose logs -f api      # follow API logs
+docker compose down             # stop, keep dev database
+docker compose down -v          # stop + wipe dev database (reseeds on next up)
+```
+
+Single-image runs (no compose, SQLite fallback inside the container):
+
+```bash
+docker build -t spc-api ./backend
+docker run -p 127.0.0.1:8000:8000 -e DJANGO_API_KEY=<32+chars> -e DJANGO_DEBUG=False spc-api
+```
+
+## API E2E (Postman CLI)
+
+```bash
+postman collection run path/to/collection.json --no-report-events
+```
+
+Covers health, seed counts, filters, register/login guards, authed create,
+self-verify refusal, staff verify, refresh, delete. Point it at another host by
+editing the collection's `baseUrl` variable.

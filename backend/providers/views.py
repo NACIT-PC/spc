@@ -7,6 +7,10 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView as _TokenObtainPairView,
+    TokenRefreshView as _TokenRefreshView,
+)
 
 from .models import CategoryModel, ProviderModel
 from .serializers import CategorySerializer, ProviderSerializer, RegisterSerializer
@@ -60,6 +64,17 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "auth"
+
+
+# ponytail: same 10/min "auth" throttle as register; closes password-guessing
+class TokenObtainPairView(_TokenObtainPairView):
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "auth"
+
+
+class TokenRefreshView(_TokenRefreshView):
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = "auth"
 
