@@ -45,8 +45,8 @@ jobs:
             sleep 4
           done
           curl -sf http://localhost:8000/api/health/
-          test "$(curl -s 'http://localhost:8000/api/providers/' | python3 -c 'import sys,json; print(json.load(sys.stdin)[\"count\"])')" = "6"
-          test "$(curl -s http://localhost:8000/api/categories/ | python3 -c 'import sys,json; print(len(json.load(sys.stdin)[\"results\"]))')" = "6"
+          test "$(curl -s 'http://localhost:8000/api/providers/' | python3 -c "import sys,json; print(json.load(sys.stdin)['count'])")" = "6"
+          test "$(curl -s http://localhost:8000/api/categories/ | python3 -c "import sys,json; print(len(json.load(sys.stdin)['results']))")" = "6"
           test "$(curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost:8000/api/providers/ -H 'Content-Type: application/json' -d '{"name":"x"}')" = "401"
       - if: always()
         run: docker rm -f spc-ci
