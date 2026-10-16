@@ -52,6 +52,29 @@ flowchart LR
 | `providers/fixtures/demo_providers.json` | 6 categories + 6 fictional providers (fixed UUIDs → reloads are idempotent) |
 | `providers/migrations/0004_seed_admin.py` | Creates superuser `admin` if none exists (password from `DJANGO_ADMIN_PASSWORD`, demo default otherwise) |
 
+## Data model (ERD)
+
+```mermaid
+erDiagram
+    CATEGORY ||--o{ PROVIDER : contains
+    CATEGORY {
+        uuid id PK
+        string name UK
+    }
+    PROVIDER {
+        uuid id PK
+        string name
+        uuid category FK
+        string city
+        string price_range
+        text description
+        string phone UK
+        string whatsapp
+        bool is_verified
+        datetime created_at
+    }
+```
+
 ## Frontend modules
 
 ```mermaid
