@@ -7,6 +7,48 @@ A small web app helping event organisers in Malawi discover service providers
 category/city/text, contact via WhatsApp or phone. Signed-in users can submit
 listings (live as *unverified*); staff verify them in a review queue.
 
+Working title: Service Provider Catalogue. Short name: **SPC**. A student club
+demo: the name and pages must never imply official endorsement by any business,
+directory, or government body.
+
+## Problem statement
+
+Event organisers find decorators, caterers, MCs, and similar providers through
+word of mouth, Facebook groups, and WhatsApp statuses. That information is
+scattered, hard to compare, and impossible to search in one place. SPC gathers
+sample listings into a single searchable catalogue with direct contact links.
+
+The current listings are provisional sample data, not verified supply. The
+catalogue is useful the moment its data is real; until then it demonstrates the
+journey, not the directory.
+
+## Target users
+
+- **Event organiser**: planning a wedding, funeral, conference, or party, needs
+  a suitable provider in a particular city, and wants to compare options before
+  making contact.
+- **Small service provider**: wants to be discoverable and receive enquiries
+  without depending on social-media reach or word of mouth.
+
+## Example user journey
+
+> "I need a decorator in Blantyre for a wedding. What are my options?"
+
+The catalogue should: show providers matching decor + Blantyre; display what
+each one offers with an indicative price range; and open a working WhatsApp or
+phone contact. It must not claim any listing is verified unless staff actually
+checked it, and must not present sample data as real businesses.
+
+## MVP scope
+
+| Included | Excluded until validated |
+| --- | --- |
+| Browse, search, category/city filters | Customer accounts beyond basic login |
+| Provider details + WhatsApp/phone contact | Payments, bookings, escrow |
+| Signed-in submissions (live as unverified) | Ratings, reviews, public comments |
+| Staff verify/delete + Django admin | Provider self-service dashboards |
+| Health endpoint, tests, Docker, CI | Analytics, commercial verification workflow |
+
 ## Status honesty (read first)
 
 - Requirements are **provisional**: stakeholder interviews have not happened.
@@ -39,6 +81,46 @@ Python `>=3.13` (`backend/pyproject.toml` is the single source of deps).
 - Submissions: any signed-in user can list a business (unverified until staff review)
 - Staff review queue (`admin.html` + Django `/admin/`): verify / delete listings
 - Paginated API (20/page); the frontend follows `next` links so filters see everything
+
+## Demo-ready checklist
+
+The demo is ready when every line is true and evidenced:
+
+- The catalogue loads from the API (or `?demo`) with no console errors
+- Each filter and search returns exactly the matching sample records
+- At least one contact action opens the correct WhatsApp/phone destination
+- A submission goes live as unverified; a staff verify flips the badge
+- Tests are recorded as passed from an actual run, never assumed
+- Backup screenshots or a recording exist in case free-tier hosting sleeps
+
+## Risks and mitigations
+
+| Risk | Mitigation |
+| --- | --- |
+| Scope grows past the MVP | Extra features wait in the post-MVP list; the demo path freezes first |
+| Free-tier hosting sleeps or cold-starts | Warm `/api/health/` before presenting; keep offline backup |
+| CORS or host config blocks the API | Test the deployed frontend against the deployed API; list exact origins |
+| SQLite data lost on redeploy | Attach Postgres for anything that must persist |
+| Sample data mistaken for real listings | Label demo data; never show the verified badge without a real check |
+| Beginner blockers stall integration | Small tasks, pairing, early help; the smallest end-to-end path first |
+
+## Open questions
+
+Resolve these with evidence, not guesses:
+
+- What do organisers actually need on a card before making contact?
+- Which details are providers comfortable publishing?
+- Postgres now, or is ephemeral SQLite enough for the next demo?
+- What counts as "verified": a phone call, a visit, a document?
+- Who owns moderation once listings are real?
+
+## Disclaimer
+
+SPC is a demonstration information tool built by students. Its listings are
+fictional samples, not a verified directory; its explanations of the system
+are not guarantees about any real business. Contact details shown anywhere
+must be permissioned or placeholders. Verify providers and use official
+channels before relying on anything here for a real event.
 
 ## Project structure
 
