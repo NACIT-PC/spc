@@ -1,0 +1,11 @@
+# Root build context: keep it small (venv + frontend + docs stay out).
+.git/
+.github/
+frontend/
+docs/
+backend/.venv/
+backend/__pycache__/
+backend/db.sqlite3
+backend/staticfiles/
+**/__pycache__/
+*.py[cod]
