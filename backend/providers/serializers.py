@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import CategoryModel, ProviderModel
 
@@ -39,8 +40,16 @@ class ProviderSerializer(serializers.ModelSerializer):
             "created_at",
         ]
 
-        only_reads_field=[
-            "id",
-            "is_verified",
-            "created_at"
-        ]
+        read_only_fields = ["id", "is_verified", "created_at"]
+
+
+"""public self-registration; staff flags are never accepted here"""
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=8, max_length=128)
+
+    class Meta:
+        model = User
+        fields = ["username", "password"]
+
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)

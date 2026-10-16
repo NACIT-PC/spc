@@ -33,7 +33,8 @@ class ProviderModel(models.Model):
     city = models.CharField(max_length=155)
     price_range = models.CharField(max_length=200)
     description = models.TextField(blank=False)
-    phone = models.IntegerField(unique=True, blank=False)
+    # ponytail: CharField preserves leading 0 and 265xxxxxxxxx (>32-bit int ceiling)
+    phone = models.CharField(max_length=20, unique=True, blank=False)
     whatsapp = models.CharField(max_length=100, blank=True)
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -44,7 +45,7 @@ class ProviderModel(models.Model):
         verbose_name_plural="providers"
 
 
-    def __string__(self):
+    def __str__(self):
         return f"{self.name}"
 
     
